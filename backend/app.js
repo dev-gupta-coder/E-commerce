@@ -20,7 +20,7 @@ import wishlistRoutes from "./src/routes/wishlist.routes.js";
 import authRoutes    from "./src/routes/auth.routes.js";
 import productRoutes from "./src/routes/product.routes.js";
 import orderRoutes   from "./src/routes/order.routes.js";
-// import paymentRoutes from "./src/routes/payment.routes.js"; 
+import paymentRoutes from "./src/routes/payment.routes.js"; 
 import cartRoutes from "./src/routes/cart.routes.js"; //by chatgpt
 import addressRoutes from "./src/routes/address.routes.js"; //by chatgpt 
 
@@ -170,7 +170,7 @@ app.get("/health", (_req, res) => {
 app.use("/api/v1/auth",     authRoutes);
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/orders",   orderRoutes);   
-// app.use("/api/v1/payments", paymentRoutes);
+app.use("/api/v1/payments", paymentRoutes);
 app.use("/api/v1/cart", cartRoutes);//by chatgpt
 app.use("/api/v1/wishlist", wishlistRoutes); //by chatgpt
 app.use("/api/v1/address", addressRoutes); //by chatgpt

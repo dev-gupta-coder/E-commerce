@@ -7,6 +7,10 @@ import { ApiError }     from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse }  from "../utils/ApiResponse.js";
 
+console.log("BODY =", req.body);
+console.log("USER =", req.user);
+console.log("ORDER_ID =", req.body.orderId);
+
 export const createRazorpayOrder = asyncHandler(async (req, res) => {
   const { orderId } = req.body;
 
@@ -14,7 +18,13 @@ export const createRazorpayOrder = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Order ID is required.");
   }
 
+
+
   const order = await Order.findOne({ _id: orderId, user: req.user._id });
+
+
+
+
 
   if (!order) {
     throw new ApiError(404, "Order not found.");
