@@ -156,7 +156,7 @@ export const connectDB = async () => {
     throw error;
   }
 };
-
+ 
 // ============================================================
 //  registerConnectionEvents
 //  Mongoose emits lifecycle events on mongoose.connection.

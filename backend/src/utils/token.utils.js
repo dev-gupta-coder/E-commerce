@@ -60,7 +60,7 @@ const {
 // Crash the process at import time if secrets are missing.
 // A server running without JWT secrets is misconfigured and
 // should not accept traffic.
-if (!JWT_ACCESS_SECRET || !JWT_REFRESH_SECRET) {
+if (!JWT_ACCESS_SECRET || !JWT_REFRESH_SECRET) {  
   throw new Error(
     "[token.utils] JWT_ACCESS_SECRET and JWT_REFRESH_SECRET " +
     "must be defined in environment variables."

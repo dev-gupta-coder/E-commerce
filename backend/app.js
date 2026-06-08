@@ -14,17 +14,17 @@ import { rateLimit } from "express-rate-limit";
 
 // ─── Route Imports ────────────────────────────────────────────
 // Uncomment and add your routers as you build them out.
-// import authRoutes    from "./src/routes/auth.routes.js";
+import authRoutes    from "./src/routes/auth.routes.js";
 // import productRoutes from "./src/routes/product.routes.js";
 // import orderRoutes   from "./src/routes/order.routes.js";
-// import paymentRoutes from "./src/routes/payment.routes.js";
+// import paymentRoutes from "./src/routes/payment.routes.js"; 
 
 // ─── Error Handler Import ─────────────────────────────────────
 // import { errorHandler } from "./src/middleware/error.middleware.js";
 
 // ─── Create Express Application ───────────────────────────────
-const app = express();
-
+const app = express();    
+ 
 // ============================================================
 //  1. SECURITY — HELMET
 //  Sets ~15 security-related HTTP response headers in one call.
@@ -34,7 +34,7 @@ const app = express();
 //  Should be the FIRST middleware so every response gets the headers.
 // ============================================================
 app.use(helmet());
-
+ 
 // ============================================================
 //  2. CORS — CROSS-ORIGIN RESOURCE SHARING
 //  Controls which origins (domains) are allowed to call this API.
@@ -162,11 +162,11 @@ app.get("/health", (_req, res) => {
 //
 //  Mount order matters: more specific paths first.
 // ============================================================
-// app.use("/api/v1/auth",     authRoutes);
+app.use("/api/v1/auth",     authRoutes);
 // app.use("/api/v1/products", productRoutes);
 // app.use("/api/v1/orders",   orderRoutes);
 // app.use("/api/v1/payments", paymentRoutes);
-
+ 
 // ============================================================
 //  9. 404 — UNMATCHED ROUTES
 //  Any request that doesn't match an existing route falls here.

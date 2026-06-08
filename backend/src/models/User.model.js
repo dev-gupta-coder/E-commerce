@@ -348,7 +348,7 @@ const userSchema = new mongoose.Schema(
 //    auto-delete users; it's used here only as a query-performance
 //    index for the reset-flow lookup.
 // ============================================================
-userSchema.index({ mobile: 1 }, { unique: true });
+// userSchema.index({ mobile: 1 }, { unique: true });
 
 // ── Compound index for admin queries ───────────────────────
 // Speeds up "find all active customers" queries issued from the
@@ -403,29 +403,39 @@ userSchema.virtual("wishlistCount").get(function () {
 //    Passing an Error to next(err) aborts the save and surfaces
 //    the error to the caller.
 // ============================================================
-userSchema.pre("save", async function (next) {
-  // Skip hashing if the password field has not been touched.
-  // this.isModified() returns true only when the field value
-  // has changed in the current document instance.
-  if (!this.isModified("password")) return next();
+// userSchema.pre("save", async function (next) {
+//   // Skip hashing if the password field has not been touched.
+//   // this.isModified() returns true only when the field value
+//   // has changed in the current document instance.
+//   if (!this.isModified("password")) return next();
 
-  try {
-    // Generate a random salt with SALT_ROUNDS iterations.
-    // The salt is embedded in the resulting hash string, so you
-    // do NOT need to store it separately.
-    const salt = await bcrypt.genSalt(SALT_ROUNDS);
+//   try {
+//     // Generate a random salt with SALT_ROUNDS iterations.
+//     // The salt is embedded in the resulting hash string, so you
+//     // do NOT need to store it separately.
+//     const salt = await bcrypt.genSalt(SALT_ROUNDS);
 
-    // Replace the plain-text password with its bcrypt hash.
-    // The hash includes algorithm identifier + cost + salt + digest,
-    // e.g.: "$2b$12$<22-char salt><31-char hash>"
-    this.password = await bcrypt.hash(this.password, salt);
+//     // Replace the plain-text password with its bcrypt hash.
+//     // The hash includes algorithm identifier + cost + salt + digest,
+//     // e.g.: "$2b$12$<22-char salt><31-char hash>"
+//     this.password = await bcrypt.hash(this.password, salt);
 
-    next(); // ← proceed to save
-  } catch (error) {
-    // Surface hashing errors (extremely rare, but possible if
-    // bcrypt's native bindings fail) as a proper Mongoose error.
-    next(error);
-  }
+//     next(); // ← proceed to save
+//   } catch (error) {
+//     // Surface hashing errors (extremely rare, but possible if
+//     // bcrypt's native bindings fail) as a proper Mongoose error.
+//     next(error);    
+//   }
+// });
+userSchema.pre("save", async function () {
+  // Skip hashing if password wasn't modified
+  if (!this.isModified("password")) return;
+
+  // Generate salt
+  const salt = await bcrypt.genSalt(SALT_ROUNDS);
+
+  // Hash password
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 // ============================================================

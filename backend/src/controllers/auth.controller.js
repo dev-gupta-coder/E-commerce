@@ -7,7 +7,7 @@
 //    No business logic lives here; controllers are thin.
 //
 //  Routes handled:
-//    POST   /api/v1/auth/register        → register
+  //  POST   /api/v1/auth/register        → register
 //    POST   /api/v1/auth/login           → login
 //    POST   /api/v1/auth/logout          → logout
 //    POST   /api/v1/auth/refresh-token   → refreshAccessToken
@@ -35,8 +35,8 @@ import {
   verifyRefreshToken,
   setRefreshTokenCookie,
   clearRefreshTokenCookie,
-}                                      from "../utils/token.utils.js";
-
+}                                        from "../utils/token.utils.js";
+// import  
 // ============================================================
 //  HELPER — issueTokens
 //  Generates a fresh Access + Refresh token pair for a user,
@@ -371,7 +371,7 @@ export const getMe = asyncHandler(async (req, res) => {
   // req.user._id comes from the verified Access token.
   // Populate wishlist so the UI gets product titles/thumbnails.
   const user = await User.findById(req.user._id)
-    .populate("wishlist", "title price images");  // select only needed fields
+    // .populate("wishlist", "title price images");  // select only needed fields //hidden for now as wishlist is not implemented yet
 
   if (!user) {
     // Extremely rare: user was deleted after a valid token was issued.
