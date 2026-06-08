@@ -45,7 +45,7 @@ export const createOrder = asyncHandler(async (req, res) => {
       quantity:        item.quantity,
       priceAtAddition: item.priceAtAddition,
     });
-
+ 
     totalAmount += item.priceAtAddition * item.quantity;
   }
 
@@ -156,4 +156,68 @@ export const getOrderById = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, { order }, "Order fetched successfully."));
+}); 
+
+//by chatgpt
+export const getAllOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find()
+    .populate("user", "name mobile")
+    .sort({ createdAt: -1 });
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      { orders },
+      "All orders fetched successfully."
+    )
+  );
+});
+
+export const updateOrderStatus = asyncHandler(async (req, res) => {
+  const { orderId } = req.params;
+  const { orderStatus } = req.body;
+
+  const allowedStatuses = [
+    "pending",
+    "confirmed",
+    "packed",
+    "shipped",
+    "delivered",
+    "cancelled",
+  ];
+
+  if (!allowedStatuses.includes(orderStatus)) {
+    throw new ApiError(400, "Invalid order status.");
+  }
+
+  const order = await Order.findById(orderId);
+
+  if (!order) {
+    throw new ApiError(404, "Order not found.");
+  }
+
+  order.orderStatus = orderStatus;
+
+  order.statusHistory.push({
+    status: orderStatus,
+    note: `Status changed to ${orderStatus}`,
+  });
+
+  if (orderStatus === "delivered") {
+    order.deliveredAt = new Date();
+  }
+
+  if (orderStatus === "cancelled") {
+    order.cancelledAt = new Date();
+  }
+
+  await order.save();
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      { order },
+      "Order status updated successfully."
+    )
+  );
 });

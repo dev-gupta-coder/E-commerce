@@ -33,10 +33,10 @@ import { ApiResponse }            from "../utils/ApiResponse.js";
 import { asyncHandler }           from "../utils/asyncHandler.js";
 
 // ── Cloudinary service (uncomment when cloudinary.service.js exists) ──
-// import {
-//   uploadToCloudinary,
-//   deleteFromCloudinary,
-// } from "../services/cloudinary.service.js";
+import {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+} from "../services/cloudinary.service.js";
 
 // ============================================================
 //  HELPER — isValidObjectId
@@ -175,11 +175,11 @@ export const createProduct = asyncHandler(async (req, res) => {
     // );
 
     // Placeholder for local development without Cloudinary:
-    images = req.files.map((file, i) => ({
-      url:      `https://placeholder.cloudinary.com/products/${Date.now()}-${i}`,
-      publicId: `products/${Date.now()}-${i}`,
-      altText:  file.originalname,
-    }));
+    images = await Promise.all(
+  req.files.map((file) =>
+    uploadToCloudinary(file.buffer)
+  )
+);
   }
 
   // ── 3. Create Product document ────────────────────────────
@@ -378,9 +378,9 @@ export const updateProduct = asyncHandler(async (req, res) => {
 
     // Delete from Cloudinary concurrently.
     // Uncomment when cloudinary.service.js is implemented:
-    // await Promise.all(
-    //   idsToRemove.map((publicId) => deleteFromCloudinary(publicId))
-    // );
+    await Promise.all(
+      idsToRemove.map((publicId) => deleteFromCloudinary(publicId))
+    );
 
     // Remove the matching image sub-documents from the array.
     // $pull with $in removes all array elements whose publicId
@@ -407,11 +407,11 @@ export const updateProduct = asyncHandler(async (req, res) => {
     //   req.files.map((file) => uploadToCloudinary(file.buffer, "products"))
     // );
 
-    const newImages = req.files.map((file, i) => ({
-      url:      `https://placeholder.cloudinary.com/products/${Date.now()}-${i}`,
-      publicId: `products/${Date.now()}-${i}`,
-      altText:  file.originalname,
-    }));
+    const newImages = await Promise.all(
+  req.files.map((file) =>
+    uploadToCloudinary(file.buffer)
+  )
+);
 
     // $push with $each appends multiple elements to the array atomically.
     await Product.updateOne(

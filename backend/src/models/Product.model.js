@@ -416,4 +416,4 @@ productSchema.methods.recalculateRatings = async function () {
 //  where the module may be re-evaluated between test files.
 // ============================================================
 export const Product = mongoose.models.Product
-  ?? mongoose.model("Product", productSchema);
+  ?? mongoose.model("Product", productSchema); 

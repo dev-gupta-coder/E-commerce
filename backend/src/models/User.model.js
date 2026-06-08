@@ -260,13 +260,14 @@ const userSchema = new mongoose.Schema(
     //     product details, and skip it when you don't.
     //
     // Application layer should enforce a maximum wishlist length
-    // (e.g. 50 items) to keep the document size bounded.
-    wishlist: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref:  "Product",   // ← tells .populate() which collection to join
-      },
-    ],
+    // (e.g. 50 items) to keep the document size bounded. 
+
+    // wishlist: [  //chatgpt ne kaha h hatao isko
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref:  "Product",   // ← tells .populate() which collection to join
+    //   },
+    // ],
 
     // ── Refresh Token ──────────────────────────────────────
     // Stores the current valid refresh token for this user.

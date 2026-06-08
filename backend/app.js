@@ -11,13 +11,18 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import { rateLimit } from "express-rate-limit";
+// by chat gpt
+import { errorHandler } from "./src/middleware/error.middleware.js";
+import wishlistRoutes from "./src/routes/wishlist.routes.js";
 
 // ─── Route Imports ────────────────────────────────────────────
 // Uncomment and add your routers as you build them out.
 import authRoutes    from "./src/routes/auth.routes.js";
-// import productRoutes from "./src/routes/product.routes.js";
-// import orderRoutes   from "./src/routes/order.routes.js";
+import productRoutes from "./src/routes/product.routes.js";
+import orderRoutes   from "./src/routes/order.routes.js";
 // import paymentRoutes from "./src/routes/payment.routes.js"; 
+import cartRoutes from "./src/routes/cart.routes.js"; //by chatgpt
+import addressRoutes from "./src/routes/address.routes.js"; //by chatgpt 
 
 // ─── Error Handler Import ─────────────────────────────────────
 // import { errorHandler } from "./src/middleware/error.middleware.js";
@@ -163,9 +168,12 @@ app.get("/health", (_req, res) => {
 //  Mount order matters: more specific paths first.
 // ============================================================
 app.use("/api/v1/auth",     authRoutes);
-// app.use("/api/v1/products", productRoutes);
-// app.use("/api/v1/orders",   orderRoutes);
+app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/orders",   orderRoutes);   
 // app.use("/api/v1/payments", paymentRoutes);
+app.use("/api/v1/cart", cartRoutes);//by chatgpt
+app.use("/api/v1/wishlist", wishlistRoutes); //by chatgpt
+app.use("/api/v1/address", addressRoutes); //by chatgpt
  
 // ============================================================
 //  9. 404 — UNMATCHED ROUTES
@@ -173,6 +181,7 @@ app.use("/api/v1/auth",     authRoutes);
 //  Must be placed AFTER all route definitions.
 //  Returns a structured 404 instead of Express's default HTML page.
 // ============================================================
+console.log("Routes mounted successfully");
 app.use((_req, res) => {
   res.status(404).json({
     success: false,
@@ -194,3 +203,4 @@ app.use((_req, res) => {
 // ─── Export ──────────────────────────────────────────────────
 // Export the configured app — server.js will call app.listen().
 export default app;
+app.use(errorHandler); 

@@ -91,3 +91,4 @@ router.delete("/items/:itemId", removeCartItem);
 router.delete("/", clearCart);
 
 export default router;
+console.log("✅ Cart Routes Loaded");  

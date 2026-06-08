@@ -25,13 +25,14 @@
 // ============================================================
 
 import { Router }         from "express";
+import { upload } from "../middleware/upload.middleware.js";
 
 // ── Auth middleware (who are you?) ───────────────────────────
 import { verifyJWT }      from "../middleware/auth.middleware.js";
 
 // ── RBAC middleware (what can you do?) ───────────────────────
 import {
-  requireAdmin,
+  requireAdmin, 
   requireCustomer,
   requireAnyRole,
   authorizeOwnership,
@@ -52,10 +53,10 @@ import {
 
 // ── Middleware that fetches the resource and sets res.locals ─
 // Used as the "fetch" step before authorizeOwnership().
-import { fetchReview }    from "../middleware/fetchResource.middleware.js";
+// import { fetchReview }    from "../middleware/fetchResource.middleware.js";//hidden
 
 const router = Router();
-
+console.log("✅ Product Routes Loaded");  //hidden temp put
 // ============================================================
 //  PUBLIC ROUTES
 //  No authentication required — anyone (guest or logged-in)
@@ -89,19 +90,34 @@ router.get("/:id", getProductById);
 
 // POST /api/v1/products
 // Admin creates a new product (with images via Cloudinary).
+// router.post(
+//   "/",
+//   verifyJWT,         // Step 1 — authenticate
+//   requireAdmin,      // Step 2 — must be admin
+//   createProduct      // Step 3 — handle the request
+// );
+
 router.post(
   "/",
-  verifyJWT,         // Step 1 — authenticate
-  requireAdmin,      // Step 2 — must be admin
-  createProduct      // Step 3 — handle the request
+  verifyJWT,
+  requireAdmin,
+  upload.array("images", 10),
+  createProduct
 );
 
 // PUT /api/v1/products/:id
 // Admin updates an existing product's details, price, or stock.
+// router.put(
+//   "/:id",
+//   verifyJWT,
+//   requireAdmin,
+//   updateProduct
+// );
 router.put(
   "/:id",
   verifyJWT,
   requireAdmin,
+  upload.array("images", 10),
   updateProduct
 );
 
@@ -154,15 +170,21 @@ router.post(
 
 // DELETE /api/v1/products/:id/review
 // Customer deletes their own review; admin can delete any review.
+// router.delete(  //hidden
+//   "/:id/review",
+//   verifyJWT,
+//   requireAnyRole,
+//   // fetchReview,  //hidden     // populates res.locals.resource = reviewDocument
+//   // authorizeOwnership((review) => review.user.toString()), //hidden
+//   // ↑ selector tells the middleware which field holds the owner ID
+//   deleteReview
+// );
 router.delete(
   "/:id/review",
   verifyJWT,
   requireAnyRole,
-  fetchReview,       // populates res.locals.resource = reviewDocument
-  authorizeOwnership((review) => review.user.toString()),
-  // ↑ selector tells the middleware which field holds the owner ID
   deleteReview
-);
+); 
 
 // ============================================================
 //  ADVANCED EXAMPLE — dynamic role from config
@@ -183,4 +205,5 @@ router.patch(
   updateProduct                 // reuse the update controller with a body flag
 );
 
-export default router;
+
+export default router; 

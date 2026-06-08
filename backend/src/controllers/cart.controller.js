@@ -36,7 +36,7 @@ import { asyncHandler }  from "../utils/asyncHandler.js";
 // ============================================================
 //  CONSTANTS
 // ============================================================
-const MAX_CART_ITEMS = 50;
+const MAX_CART_ITEMS = 50; 
 const MAX_ITEM_QTY   = 10;
 const MIN_ITEM_QTY   = 1;
 
