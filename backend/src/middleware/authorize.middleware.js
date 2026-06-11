@@ -56,7 +56,8 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 //    if (req.user.role === ROLES.customer) { ... }
 // ============================================================
 export const ROLES = Object.freeze({
-  ADMIN:    "admin",
+  // ADMIN:    "admin",
+  ADMIN:   "owner",
   CUSTOMER: "customer",
 });
 

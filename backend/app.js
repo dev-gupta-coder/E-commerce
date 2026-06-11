@@ -55,19 +55,27 @@ const allowedOrigins = process.env.CORS_ORIGIN
   : ["http://localhost:3000"];
 
 app.use(
+  // cors({
+  //   origin: (incomingOrigin, callback) => {
+  //     // Allow server-to-server requests (no origin header) and whitelisted origins.
+  //     if (!incomingOrigin || allowedOrigins.includes(incomingOrigin)) {
+  //       callback(null, true);
+  //     } else {
+  //       callback(new Error(`CORS: Origin "${incomingOrigin}" is not allowed.`));
+  //     }
+  //   },
+  //   credentials: true,                        // Required for cookies / JWT in Authorization header
+  //   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  //   allowedHeaders: ["Content-Type", "Authorization"],
+  // })
+
   cors({
-    origin: (incomingOrigin, callback) => {
-      // Allow server-to-server requests (no origin header) and whitelisted origins.
-      if (!incomingOrigin || allowedOrigins.includes(incomingOrigin)) {
-        callback(null, true);
-      } else {
-        callback(new Error(`CORS: Origin "${incomingOrigin}" is not allowed.`));
-      }
-    },
-    credentials: true,                        // Required for cookies / JWT in Authorization header
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
+
 );
 
 // ============================================================
