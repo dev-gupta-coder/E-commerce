@@ -8,7 +8,7 @@ export const getAddresses = asyncHandler(async (req, res) => {
 });
 
 export const addAddress = asyncHandler(async (req, res) => {
-  return res
+  return res 
     .status(201)
     .json(new ApiResponse(201, null, "Address added."));
 });

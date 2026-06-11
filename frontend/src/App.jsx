@@ -22,6 +22,9 @@ const App = () => {
   useEffect(() => {
     dispatch(initAuthThunk());
   }, [dispatch]);
+//   useEffect(() => {
+//   // dispatch(initAuthThunk());
+// }, []);
 
   return <AppRouter />;
 };
