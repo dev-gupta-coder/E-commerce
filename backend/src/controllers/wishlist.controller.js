@@ -1,5 +1,5 @@
 import mongoose         from "mongoose";
-import { Wishlist }     from "../models/Wishlist.model.js";
+import { Wishlist }     from "../models/wishlist.model.js";
 import { Product }      from "../models/Product.model.js";
 import { ApiError }     from "../utils/ApiError.js";
 import { ApiResponse }  from "../utils/ApiResponse.js";
